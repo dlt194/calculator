@@ -39,6 +39,7 @@ const calculatorSlice = createSlice({
         state.input = result.toString();
       } catch (error) {
         state.output = "Error";
+        console.log(error);
       }
     },
     setOperator: (state, action) => {

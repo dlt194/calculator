@@ -31,7 +31,7 @@ const buttons = [
 
 export default function Calculator() {
   const dispatch = useDispatch();
-  const { input, output } = useSelector((state: RootState) => state.calculator);
+  const { input } = useSelector((state: RootState) => state.calculator);
 
   const handleClick = (label: string, action: string) => {
     if (action === "number" || label === ".") dispatch(appendInput(label));
