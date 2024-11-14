@@ -15,10 +15,17 @@ const calculatorSlice = createSlice({
   initialState,
   reducers: {
     appendInput: (state, action) => {
-      if (state.input === "0" && action.payload !== ".") {
-        state.input = action.payload;
+      const value = action.payload;
+
+      const currentNumber = state.input.split(/[\+\-\*\/]/).pop() || "";
+      if (value === "." && currentNumber.includes(".")) {
+        return;
+      }
+
+      if (state.input === "0" && value !== ".") {
+        state.input = value;
       } else {
-        state.input += action.payload;
+        state.input += value;
       }
     },
     clearInput: (state) => {
@@ -27,7 +34,6 @@ const calculatorSlice = createSlice({
     },
     evaluateExpression: (state) => {
       try {
-        // eslint-disable-next-line no-eval
         const result = eval(state.input);
         state.output = result.toString();
         state.input = result.toString();
@@ -36,11 +42,20 @@ const calculatorSlice = createSlice({
       }
     },
     setOperator: (state, action) => {
+      const operator = action.payload;
       const lastChar = state.input.slice(-1);
+
+      // Handle consecutive operators, allowing a single negative sign
       if ("+-*/".includes(lastChar)) {
-        state.input = state.input.slice(0, -1) + action.payload;
+        if (operator === "-" && lastChar !== "-") {
+          // Allow a negative sign after an operator
+          state.input += operator;
+        } else if (operator !== "-") {
+          // Replace the last operator with the new one
+          state.input = state.input.replace(/[\+\-\*\/]+$/, operator);
+        }
       } else {
-        state.input += action.payload;
+        state.input += operator;
       }
     },
   },

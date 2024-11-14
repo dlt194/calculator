@@ -13,6 +13,7 @@ const buttons = [
   { id: "clear", label: "C", action: "clear" },
   { id: "divide", label: "/", action: "operator" },
   { id: "multiply", label: "*", action: "operator" },
+  { id: "add", label: "+", action: "operator" },
   { id: "seven", label: "7", action: "number" },
   { id: "eight", label: "8", action: "number" },
   { id: "nine", label: "9", action: "number" },
@@ -20,11 +21,10 @@ const buttons = [
   { id: "four", label: "4", action: "number" },
   { id: "five", label: "5", action: "number" },
   { id: "six", label: "6", action: "number" },
-  { id: "add", label: "+", action: "operator" },
+  { id: "equals", label: "=", action: "equals" },
   { id: "one", label: "1", action: "number" },
   { id: "two", label: "2", action: "number" },
   { id: "three", label: "3", action: "number" },
-  { id: "equals", label: "=", action: "equals" },
   { id: "zero", label: "0", action: "number" },
   { id: "decimal", label: ".", action: "number" },
 ];
@@ -34,7 +34,7 @@ export default function Calculator() {
   const { input, output } = useSelector((state: RootState) => state.calculator);
 
   const handleClick = (label: string, action: string) => {
-    if (action === "number") dispatch(appendInput(label));
+    if (action === "number" || label === ".") dispatch(appendInput(label));
     if (action === "operator") dispatch(setOperator(label));
     if (action === "equals") dispatch(evaluateExpression());
     if (action === "clear") dispatch(clearInput());
